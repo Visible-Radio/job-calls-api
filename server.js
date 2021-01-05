@@ -81,12 +81,10 @@ app.get('/members_needed', (req, res) => {
 	});
 	// need to add error handling
 });
-
-//==========TOTAL MEMBERS NEEDED FOR A GIVEN DAY OR DAYS===============
-
 	
 //========MEMBERS NEEDED BY CLASSIFICATION FOR A DAY OR DAYS==========
 app.post('/members_needed_by_date', (req, res) => {
+
 	const member_classes = req.body.hasOwnProperty('member_class') 
 		? req.body.member_class
 		: [
@@ -99,11 +97,63 @@ app.post('/members_needed_by_date', (req, res) => {
 		.distinct()
 		.whereBetween('call_date_iso', [req.body.start, req.body.end])
 		.orderBy('call_date_iso')
-		.then(dates => {
-			const dayTotals = dates.map(obj => {								
+		.then(days => {
+			return days.map(day => Object.values(day)).flat()
+				.map(dateStamp => dateStamp.toISOString().match(/\d\d\d\d-\d\d-\d\d/)[0]);
+			}
+		)
+		.then(daysISO => {
+				return daysISO.map(day => {										
+					const callCountPromises = member_classes.map(member_class => {
+						return Promise.resolve(
+							db('job_calls')
+							.where('call_date_iso', '=', day)
+							.sum(`members_needed as ${member_class}`)
+							.from('job_calls')
+							.where('member_class', '=', member_class)											
+						)					
+					})
+					return (Promise.all(callCountPromises)					
+					.then(resolved => {
+						const daysTotals = {};												
+						let counter = 0;
+						resolved.forEach((count,i) => {
+							daysTotals[Object.keys(resolved[i][0])] = Object.values(resolved[i][0])[0];
+							counter += Number(Object.values(resolved[i][0])[0]);
+						})
+						daysTotals.TOTAL = String(counter);	
+						daysTotals.date = day;							
+						return daysTotals;
+					}))
+					return;
+				})				
+				return;
+			}
+		)
+		.then(dayTotals => (Promise.all(dayTotals)))
+		.then(dayTotals => res.json(dayTotals))
+		.catch(error => res.json('something went wrong'));
+});
+
+//========OLD, for comparison==========
+//SLIGHT CLEANING
+app.post('/members_needed_by_date_old', (req, res) => {
+	const member_classes = req.body.hasOwnProperty('member_class') 
+		? req.body.member_class
+		: [
+			'JW', 'AW', 'JHW', 'AHW', 'RJW', 'JL', 'AL', 'TEC1', 'TEC2',
+			'TEC3', 'TEC4', 'ATEC', 'CI', 'ETN', 'JCS', 'U'
+		];
+
+	const days = db.select('call_date_iso')		
+		.from('job_calls')
+		.distinct()
+		.whereBetween('call_date_iso', [req.body.start, req.body.end])
+		.orderBy('call_date_iso')
+		.then(days => {
+			const dayTotals = days.map(day => {								
 				// again we end up with time stamps........hack them off with this regex....			
-				const call_date = obj.call_date_iso.toISOString().match(/\d\d\d\d-\d\d-\d\d/)[0]
-				console.log(call_date);
+				const call_date = day.call_date_iso.toISOString().match(/\d\d\d\d-\d\d-\d\d/)[0]
 				const dbCallsPromises = getDateStats(call_date);
 				return Promise.all(dbCallsPromises)
 					.then(values => {						
@@ -140,9 +190,6 @@ app.post('/members_needed_by_date', (req, res) => {
 	}
 
 });
-
-
-
 
 const PORT = 3000;
 app.listen(PORT || 3000, () => {
