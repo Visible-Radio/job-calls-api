@@ -123,7 +123,7 @@ app.post('/members_needed_by_date', async (req, res) => {
 	}
 
 	async function getCountsForClasses(member_classes,day) {
-		const countsForClasses = [['Date:', day]];
+		const countsForClasses = [['Date', day]];
 		let total = 0;
 		for (let i = 0; i < member_classes.length; i++) {
 			const countForClass = await getCountForClass(member_classes[i], day);
