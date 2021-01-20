@@ -61,7 +61,6 @@ function validateBody(body) {
 	return true;
 }
 
-
 app.post('/', (req, res) => {
 	if (!validateBody(req.body)) {
 		return res.status(400).json('invalid request body');
@@ -85,40 +84,40 @@ app.post('/', (req, res) => {
 })
 
 //===============TOTAL MEMBERS NEEDED FOR ALL TIME===================
-app.get('/total_members_needed', (req, res) => {		
-	db('job_calls').sum('members_needed').from('job_calls')
-	.then(sum => res.json(sum[0].sum))
-});
+// app.get('/total_members_needed', (req, res) => {		
+// 	db('job_calls').sum('members_needed').from('job_calls')
+// 	.then(sum => res.json(sum[0].sum))
+// });
 
 //==========MEMBERS NEEDED BY CLASSIFICATION FOR ALL TIME============
-app.get('/members_needed', (req, res) => {
-	const totals = {};
-	const member_classes =[
-		'JW', 'AW', 'JHW', 'AHW', 'RJW', 'JL', 'AL', 'TEC1', 'TEC2',
-		'TEC3', 'TEC4', 'ATEC', 'CI', 'ETN', 'JCS', 'U'
-	];
+// app.get('/members_needed', (req, res) => {
+// 	const totals = {};
+// 	const member_classes =[
+// 		'JW', 'AW', 'JHW', 'AHW', 'RJW', 'JL', 'AL', 'TEC1', 'TEC2',
+// 		'TEC3', 'TEC4', 'ATEC', 'CI', 'ETN', 'JCS', 'U'
+// 	];
 
-	const dbCalls = [];
-	member_classes.forEach(member_class => {
-		dbCalls.push(
-			db('job_calls')
-			.sum('members_needed')
-			.from('job_calls')
-			.where('member_class', '=', member_class)
-		);
-	})
+// 	const dbCalls = [];
+// 	member_classes.forEach(member_class => {
+// 		dbCalls.push(
+// 			db('job_calls')
+// 			.sum('members_needed')
+// 			.from('job_calls')
+// 			.where('member_class', '=', member_class)
+// 		);
+// 	})
 	
-	Promise.all(dbCalls).then(values => {
-		let total = 0;
-		values.flat().forEach((obj, i) => {
-			totals[member_classes[i]] = obj.sum;
-			total += Number(obj.sum);
-		})
-		totals.TOTAL = String(total);
-		res.json(totals);
-	});
-	// need to add error handling
-});
+// 	Promise.all(dbCalls).then(values => {
+// 		let total = 0;
+// 		values.flat().forEach((obj, i) => {
+// 			totals[member_classes[i]] = obj.sum;
+// 			total += Number(obj.sum);
+// 		})
+// 		totals.TOTAL = String(total);
+// 		res.json(totals);
+// 	});
+// 	// need to add error handling
+// });
 	
 //========MEMBERS NEEDED BY CLASSIFICATION FOR A DAY OR DAYS==========
 app.post('/members_needed_by_date', async (req, res) => {
