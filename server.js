@@ -24,11 +24,49 @@ app.use(cors());
     "start": "2020-12-01",
     "end": "2020-12-31",
     "member_class": ["JW", "AW", "AHW", "TEC2"],
-    "company": ["PLAN GROUP INC."]
+    "company": "PLAN GROUP INC."
 }*/
-// currently company must be an exact match
+// company only accepts one value, not an array of companies
 
-app.post('/', (req, res) => {	
+function validateBody(body) {
+	// validate inputs 
+	
+	if (!body.start || !body.end) return false;
+
+	// must match exactly this date format
+	const pattern = /\d\d\d\d-\d\d-\d\d/;
+	if (!pattern.test(body.start) || !pattern.test(body.end)) return false;
+
+	// if the request specifies member classes, perform these checks	 
+	if (body.member_class) {				
+		if (!Array.isArray(body.member_class) 
+				|| body.member_class.length < 1
+				|| body.member_class.length > 32
+		) return false;
+
+		// min 1 char, max 8 chars, alphanumeric no spaces
+		const pattern = /^[A-Za-z0-9]{1,8}$/;
+		if (body.member_class.some(element => !pattern.test(element))) {
+			return false;
+		}
+	}
+
+	if (body.company) {
+		// min 1 char, max 25 chars, alphanumeric and space	
+		const pattern = /^[A-Za-z0-9 ]{1,25}$/;
+		if (!pattern.test(body.company)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+
+app.post('/', (req, res) => {
+	if (!validateBody(req.body)) {
+		return res.status(400).json('invalid request body');
+	}
+
 	db.select('*').from('job_calls')
 		.whereBetween('call_date_iso', [req.body.start, req.body.end])
 		.modify((queryBuilder) => {
@@ -38,7 +76,7 @@ app.post('/', (req, res) => {
 	  })
 	  .modify((queryBuilder) => {
 	    if (req.body.hasOwnProperty('company')) {
-	        queryBuilder.whereIn('company', req.body.company);
+	        queryBuilder.where('company', 'ilike', `%${req.body.company}%`);
 	    }
 	  })
 		.orderBy('call_date_iso')		
@@ -84,6 +122,9 @@ app.get('/members_needed', (req, res) => {
 	
 //========MEMBERS NEEDED BY CLASSIFICATION FOR A DAY OR DAYS==========
 app.post('/members_needed_by_date', async (req, res) => {
+	if (!validateBody(req.body)) {
+		return res.status(400).json('invalid request body');
+	}
 
 	const member_classes = req.body.hasOwnProperty('member_class') 
 		? req.body.member_class
@@ -95,7 +136,7 @@ app.post('/members_needed_by_date', async (req, res) => {
 	const days = await db.select('call_date_iso')		
 		.from('job_calls')
 		.distinct()
-		.whereBetween('call_date_iso', [req.body.start, req.body.end])
+		.whereBetween('call_date_iso', [req.body.start, req.body.end])		
 		.orderBy('call_date_iso')
 		.then(days => {
 			return days.map(day => Object.values(day)).flat()
@@ -137,6 +178,11 @@ app.post('/members_needed_by_date', async (req, res) => {
 	async function getCountForClass(member_class, day) {
 		return await db('job_calls')
 		.where('call_date_iso', '=', day)
+		.modify((queryBuilder) => {
+	    if (req.body.hasOwnProperty('company')) {
+	        queryBuilder.where('company', 'ilike', `%${req.body.company}%`);
+	    }
+	  })
 		.sum(`members_needed as ${member_class}`)		
 		.where('member_class', '=', member_class)
 		.then(count => {
