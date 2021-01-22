@@ -8,7 +8,8 @@ const db = knex({
     host : '127.0.0.1',
     user : '',
     password : '',
-    database : 'test'
+    // database : 'test'
+    database : 'job-calls-test2'
   }
 });
 
@@ -193,7 +194,7 @@ app.post('/members_needed_by_date', async (req, res) => {
 		
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 app.listen(PORT || 3000, () => {
 	console.log(`app is running on port ${PORT}`);
 })
