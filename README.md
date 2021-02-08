@@ -1,5 +1,5 @@
 # job-calls-api
-node server for job calls project
+Node server for job calls project
 
 Built with Node, Express, Knexs and Postgres.  A separate script handles scraping data and inserting database records.
 
