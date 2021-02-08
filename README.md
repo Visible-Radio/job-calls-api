@@ -6,12 +6,12 @@ Built with Node, Express, Knexs and Postgres.  A separate script handles scrapin
 The API responds to POST requests on the root route and at /members_needed_by_date.
 The request body should look like this:
 
-{
-    "start": "2020-12-04",
-    "end": "2020-12-31",
-    "member_class": ["JW", "AW", "TEC2", "ATEC", "CI"],
-    "company": "plan"   
-}
+    {
+        "start": "2020-12-01",
+        "end": "2020-12-31",
+        "member_class": ["JW", "AW", "TEC2", "ATEC", "CI"],
+        "company": "plan"   
+    }
 
 "start" and "end" properties are mandatory and specify the range of dates from which to return records.
 "company" property is optional, and omitting it will return results for all companies.
