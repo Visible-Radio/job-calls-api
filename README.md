@@ -71,3 +71,6 @@ For example, the same POST request above would return an array of job calls obje
         "scrape_date_ss1970": 0,
         "scrape_date_iso": null
     },
+
+A third endpoint responds to GET requests at /companies.
+It returns an array of all company names stored in the database.
