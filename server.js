@@ -3,7 +3,7 @@ const cors = require('cors');
 const knex = require('knex');
 
 //===================== setup for local db ==============//
-const db = knex({
+/* const db = knex({
   client: 'pg',
   connection: {
     host : '127.0.0.1',
@@ -12,12 +12,12 @@ const db = knex({
     // database : 'test'
     database : 'job-calls-test2'
   }
-});
+}); */
 //========================================================//
 
 //===================== setup for remote db ==============//
 
-/* const db = knex({
+const db = knex({
 	client: 'pg',
 	connection: {
 		connectionString: process.env.DATABASE_URL,
@@ -25,7 +25,7 @@ const db = knex({
     	rejectUnauthorized: false
   	}
 	}
-}); */
+});
 //===================== setup for remote db ==============//
 const app = express();
 app.use(express.json());
@@ -181,7 +181,7 @@ app.get('/companies', (req, res) => {
 		.then(companyArray => res.json(companyArray));
 });
 
-const PORT = 3000 //process.env.PORT;
+const PORT = process.env.PORT;
 app.listen(PORT || 3000, () => {
 	console.log(`app is running on port ${PORT}`);
 })
