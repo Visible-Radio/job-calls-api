@@ -1,0 +1,35 @@
+in the project directory run:
+heroku create
+
+spits out a URL
+heroku open will go to the URL
+
+still need to deploy
+need to add git remotes
+
+run
+git remote -v
+should see remotes for heroku and github
+the heroku remote might be for a different project (ie, smart-brain)
+
+heroku git:remote -a "name of new app" - ie, the URL from above
+
+git remote -v should show the new remote configured for the new app
+
+git push heroku master will now push local code and install dependencies
+
+heroku open??? hmmm
+dev dependencies don't get installed
+
+heroku logs --tail for info about what went wrong
+
+need to bring port in as an environmental variable
+in ther server file, change the port to
+process.env.PORT || 3000
+
+remember, any changes, you gotta:
+git add. git commit git push heroku master
+
+it'll redeploy the server, installing dependencies etc
+
+heroku logs --tails
