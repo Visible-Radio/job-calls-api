@@ -68,7 +68,10 @@ function validateBody(body) {
 
 	if (body.company) {
 		// min 1 char, max 25 chars, alphanumeric and space
-		const pattern = /^[A-Za-z0-9 ]{1,25}$/;
+		// added extra permitted chars when select menu implemented
+		// apparently knex passes params in as ? placeholders anyway,
+		// thereby protecting the query from malicious input
+		const pattern = /^[A-Za-z0-9 \.\-\(\)\&\\\/]{1,40}$/;
 		if (!pattern.test(body.company)) {
 			return false;
 		}
