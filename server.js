@@ -31,17 +31,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-//==========================ROOT ROUTE=============================
-//===========COMPLETE JOB CALL INFO FOR RANGE OF DATES=============
-//=========optionally filterable by member class and company=======
-// example post body:
-/*{
-    "start": "2020-12-01",
-    "end": "2020-12-31",
-    "member_class": ["JW", "AW", "AHW", "TEC2"],
-    "company": "PLAN GROUP INC."
-}*/
-// company only accepts one value, not an array of companies
 
 function validateBody(body) {
 	// validate inputs
@@ -79,6 +68,20 @@ function validateBody(body) {
 	return true;
 }
 
+/*
+==========================ROOT ROUTE=============================
+===========COMPLETE JOB CALL INFO FOR RANGE OF DATES=============
+=========optionally filterable by member class and company=======
+example post body:
+
+    "start": "2020-12-01",
+    "end": "2020-12-31",
+    "member_class": ["JW", "AW", "AHW", "TEC2"],
+    "company": "PLAN GROUP INC."
+
+company only accepts one value, not an array of companies
+*/
+
 app.post('/', (req, res) => {
 	if (!validateBody(req.body)) {
 		return res.status(400).json('invalid request body');
@@ -113,7 +116,7 @@ app.post('/members_needed_by_date', async (req, res) => {
 		? req.body.member_class
 		: [
 			'JW', 'AW', 'JHW', 'AHW', 'RJW', 'JL', 'AL', 'TEC1', 'TEC2',
-			'TEC3', 'TEC4', 'ATEC', 'CI', 'ETN', 'JCS', 'U'
+			'TEC3', 'TEC4', 'ATEC', 'CI', 'ETN', 'JCS', 'U', 'GEO',
 		];
 
 	const days = await db.select('call_date_iso')
@@ -184,45 +187,7 @@ app.get('/companies', (req, res) => {
 		.then(companyArray => res.json(companyArray));
 });
 
-const PORT = process.env.PORT;
-app.listen(PORT || 3000, () => {
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
 	console.log(`app is running on port ${PORT}`);
 })
-
-//===============TOTAL MEMBERS NEEDED FOR ALL TIME===================
-// app.get('/total_members_needed', (req, res) => {
-// 	db('job_calls').sum('members_needed').from('job_calls')
-// 	.then(sum => res.json(sum[0].sum))
-// });
-
-//==========MEMBERS NEEDED BY CLASSIFICATION FOR ALL TIME============
-// app.get('/members_needed', (req, res) => {
-// 	const totals = {};
-// 	const member_classes =[
-// 		'JW', 'AW', 'JHW', 'AHW', 'RJW', 'JL', 'AL', 'TEC1', 'TEC2',
-// 		'TEC3', 'TEC4', 'ATEC', 'CI', 'ETN', 'JCS', 'U'
-// 	];
-
-// 	const dbCalls = [];
-// 	member_classes.forEach(member_class => {
-// 		dbCalls.push(
-// 			db('job_calls')
-// 			.sum('members_needed')
-// 			.from('job_calls')
-// 			.where('member_class', '=', member_class)
-// 		);
-// 	})
-
-// 	Promise.all(dbCalls).then(values => {
-// 		let total = 0;
-// 		values.flat().forEach((obj, i) => {
-// 			totals[member_classes[i]] = obj.sum;
-// 			total += Number(obj.sum);
-// 		})
-// 		totals.TOTAL = String(total);
-// 		res.json(totals);
-// 	});
-// 	// need to add error handling
-// });
-
-
