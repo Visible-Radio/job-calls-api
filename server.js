@@ -3,7 +3,7 @@ const cors = require('cors');
 const knex = require('knex');
 
 //===================== setup for local db ==============//
-/* const db = knex({
+const db = knex({
   client: 'pg',
   connection: {
     host : '127.0.0.1',
@@ -12,12 +12,11 @@ const knex = require('knex');
     // database : 'test'
     database : 'job-calls-test2'
   }
-}); */
+});
 //========================================================//
 
 //===================== setup for remote db ==============//
-
-const db = knex({
+/* const db = knex({
 	client: 'pg',
 	connection: {
 		connectionString: process.env.DATABASE_URL,
@@ -25,7 +24,7 @@ const db = knex({
     	rejectUnauthorized: false
   	}
 	}
-});
+}); */
 //===================== setup for remote db ==============//
 const app = express();
 app.use(express.json());
@@ -34,7 +33,6 @@ app.use(cors());
 
 function validateBody(body) {
 	// validate inputs
-
 	if (!body.start || !body.end) return false;
 
 	// must match exactly this date format
@@ -55,15 +53,21 @@ function validateBody(body) {
 		}
 	}
 
+	// if the request specifies companies, perform these checks
 	if (body.company) {
-		// min 1 char, max 25 chars, alphanumeric and space
+		if (!Array.isArray(body.company)
+			|| body.company.length < 1
+			|| body.company.length > 8
+		) return false;
+		// min 1 char, max 40 chars, alphanumeric and space
 		// added extra permitted chars when select menu implemented
 		// apparently knex passes params in as ? placeholders anyway,
 		// thereby protecting the query from malicious input
 		const pattern = /^[A-Za-z0-9 \.\-\(\)\&\\\/]{1,40}$/;
-		if (!pattern.test(body.company)) {
+		if (body.company.some(company => !pattern.test(company))) {
 			return false;
 		}
+
 	}
 	return true;
 }
@@ -71,15 +75,10 @@ function validateBody(body) {
 /*
 ==========================ROOT ROUTE=============================
 ===========COMPLETE JOB CALL INFO FOR RANGE OF DATES=============
-=========optionally filterable by member class and company=======
-example post body:
-
     "start": "2020-12-01",
     "end": "2020-12-31",
     "member_class": ["JW", "AW", "AHW", "TEC2"],
-    "company": "PLAN GROUP INC."
-
-company only accepts one value, not an array of companies
+    "company": ["PLAN GROUP INC.", "OZZ ELECTRIC"]
 */
 
 app.post('/', (req, res) => {
@@ -96,7 +95,7 @@ app.post('/', (req, res) => {
 	  })
 	  .modify((queryBuilder) => {
 	    if (req.body.hasOwnProperty('company')) {
-	        queryBuilder.where('company', 'ilike', `%${req.body.company}%`);
+	        queryBuilder.whereIn('company', req.body.company);
 	    }
 	  })
 		.orderBy('call_date_iso')
@@ -166,7 +165,7 @@ app.post('/members_needed_by_date', async (req, res) => {
 		.where('call_date_iso', '=', day)
 		.modify((queryBuilder) => {
 	    if (req.body.hasOwnProperty('company')) {
-	        queryBuilder.where('company', 'ilike', `%${req.body.company}%`);
+	        queryBuilder.whereIn('company', req.body.company);
 	    }
 	  })
 		.sum(`members_needed as ${member_class}`)
