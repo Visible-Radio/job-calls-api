@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const knex = require('knex');
 
-const { validateBody } = require('./utils/validateBody');
 const { completeCallsByDateRange } = require('./controllers/completeCallsByDateRange');
 const { classTotalsByDateRange } = require('./controllers/classTotalsByDateRange');
 const { companyList } = require('./controllers/companyList');
