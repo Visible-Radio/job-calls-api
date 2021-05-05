@@ -27,7 +27,7 @@ function validateBody(body) {
     if (
       !Array.isArray(body.company) ||
       body.company.length < 1 ||
-      body.company.length > 8
+      body.company.length > 32
     )
       return false;
     // min 1 char, max 40 chars, alphanumeric and space
