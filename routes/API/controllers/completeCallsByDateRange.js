@@ -29,7 +29,4 @@ function completeCallsByDateRange(req, res, db) {
 		.catch(error => res.status(500).json('db error'));
 }
 
-module.exports = {
-  completeCallsByDateRange
-}
-
+module.exports = completeCallsByDateRange;

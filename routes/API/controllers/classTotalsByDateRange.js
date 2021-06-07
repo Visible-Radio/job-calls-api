@@ -72,6 +72,4 @@ async function classTotalsByDateRange(req, res, db) {
 	}
 };
 
-module.exports = {
-  classTotalsByDateRange
-}
+module.exports = classTotalsByDateRange;
