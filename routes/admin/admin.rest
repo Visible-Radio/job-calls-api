@@ -1,0 +1,5 @@
+### Access admin route to trigger emails
+### the token payload is the current date for which to get alerts
+POST http://localhost:4000/admin
+Content-Type: application/json
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyMS0wNi0wNyIsImlhdCI6MTYyMzEwMTE4NiwiZXhwIjoxNjIzMTA0Nzg2fQ.Naf0FuNM-RVWmD63p08i5KV7XH_t4zZAAcKGxubo92w

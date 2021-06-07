@@ -1,0 +1,56 @@
+### Register a new user
+POST http://localhost:4000/auth/register
+Content-Type: application/json
+
+{
+  "name": "4",
+  "email": "4@4.com",
+  "password": "4@4.com"
+}
+
+### Log in an existing user
+POST http://localhost:4000/auth/login
+Content-Type: application/json
+
+{
+  "email": "4@4.com",
+  "password": "4@4.com"
+}
+
+### Verify authorization on client refresh
+GET http://localhost:4000/auth/is-verify
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYjE5NTZkMjAtZjhlZS00MGJmLWEyNDctYzYyMzNkMzQzNzliIiwiaWF0IjoxNjIzMDk2Mzc3LCJleHAiOjE2MjMwOTk5Nzd9.iD9iFcpiu2JSUVLput3jGBzvemuMoQPF1hAF0elqgok
+
+### Add a user alert
+PUT http://localhost:4000/alerts
+Content-Type: application/json
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYjE5NTZkMjAtZjhlZS00MGJmLWEyNDctYzYyMzNkMzQzNzliIiwiaWF0IjoxNjIzMDk2Mzc3LCJleHAiOjE2MjMwOTk5Nzd9.iD9iFcpiu2JSUVLput3jGBzvemuMoQPF1hAF0elqgok
+
+{
+  "alertsCompanies": ["OZZ"],
+  "alertsClasses": ["AW"]
+}
+
+### Overwrite user alerts
+POST http://localhost:4000/alerts
+Content-Type: application/json
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYjE5NTZkMjAtZjhlZS00MGJmLWEyNDctYzYyMzNkMzQzNzliIiwiaWF0IjoxNjIzMDk2Mzc3LCJleHAiOjE2MjMwOTk5Nzd9.iD9iFcpiu2JSUVLput3jGBzvemuMoQPF1hAF0elqgok
+
+{
+  "alertsCompanies": ["OZZ", "PLAN", "GUILD"],
+  "alertsClasses": ["JW", "AW"]
+}
+
+### Delete specific alerts
+delete http://localhost:4000/alerts
+Content-Type: application/json
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYjE5NTZkMjAtZjhlZS00MGJmLWEyNDctYzYyMzNkMzQzNzliIiwiaWF0IjoxNjIzMDk2Mzc3LCJleHAiOjE2MjMwOTk5Nzd9.iD9iFcpiu2JSUVLput3jGBzvemuMoQPF1hAF0elqgok
+
+{
+  "alertsCompanies": ["PLAN", "GUILD", "OZZ", "Guild"],
+  "alertsClasses": ["JW", "AW"]
+}
+
+### Get user's alerts
+get http://localhost:4000/alerts
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYjE5NTZkMjAtZjhlZS00MGJmLWEyNDctYzYyMzNkMzQzNzliIiwiaWF0IjoxNjIzMDk2Mzc3LCJleHAiOjE2MjMwOTk5Nzd9.iD9iFcpiu2JSUVLput3jGBzvemuMoQPF1hAF0elqgok
