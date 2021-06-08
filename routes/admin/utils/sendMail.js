@@ -4,8 +4,6 @@ const makeEmailBody = require("./makeEmailBody");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const sendMail = (alerts) => {
-  console.log(`alerts`, JSON.stringify(alerts, null, 1));
-  console.log(`alerts`, alerts);
 
   alerts.forEach(alert => {
     const [ address, jobMatches] = Object.entries(alert).flat();

@@ -13,8 +13,8 @@ POST http://localhost:4000/auth/login
 Content-Type: application/json
 
 {
-  "email": "4@4.com",
-  "password": "4@4.com"
+  "email": "patrick@patrick.com",
+  "password": "patrick@patrick.com"
 }
 
 ### Verify authorization on client refresh
@@ -34,11 +34,11 @@ token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYjE5NTZkMjAtZjhlZS00MGJm
 ### Overwrite user alerts
 POST http://localhost:4000/alerts
 Content-Type: application/json
-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYjE5NTZkMjAtZjhlZS00MGJmLWEyNDctYzYyMzNkMzQzNzliIiwiaWF0IjoxNjIzMDk2Mzc3LCJleHAiOjE2MjMwOTk5Nzd9.iD9iFcpiu2JSUVLput3jGBzvemuMoQPF1hAF0elqgok
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiOGQ3MmM5OWItMjUyMi00MzY1LThmOTItMjM3NTcxNTUyZjc4IiwiaWF0IjoxNjIzMTYyNjk4LCJleHAiOjE2MjMxNjYyOTh9.Fe2sjHYvR4REdz_E1EDO8RM3HjeUQ30ThNeswDVfod0
 
 {
-  "alertsCompanies": ["OZZ", "PLAN", "GUILD"],
-  "alertsClasses": ["JW", "AW"]
+  "alertsCompanies": ["WARDEN DISTRICT ELECTRO-SERVICES"],
+  "alertsClasses": ["AW"]
 }
 
 ### Delete specific alerts
@@ -53,4 +53,4 @@ token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYjE5NTZkMjAtZjhlZS00MGJm
 
 ### Get user's alerts
 get http://localhost:4000/alerts
-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYjE5NTZkMjAtZjhlZS00MGJmLWEyNDctYzYyMzNkMzQzNzliIiwiaWF0IjoxNjIzMDk2Mzc3LCJleHAiOjE2MjMwOTk5Nzd9.iD9iFcpiu2JSUVLput3jGBzvemuMoQPF1hAF0elqgok
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiOGQ3MmM5OWItMjUyMi00MzY1LThmOTItMjM3NTcxNTUyZjc4IiwiaWF0IjoxNjIzMTYyNjk4LCJleHAiOjE2MjMxNjYyOTh9.Fe2sjHYvR4REdz_E1EDO8RM3HjeUQ30ThNeswDVfod0

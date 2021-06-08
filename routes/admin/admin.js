@@ -9,7 +9,6 @@ router.post('/', adminAuthorization, async(req, res) => {
   const syncDate = req.date;
   // date handling is verrrrry fuzzy since we're ignoring timezones...
 
-
   try {
     // get the most recent calls based on the date sent from the scraper
     const calls = await db.select('*').from('job_calls')
@@ -22,8 +21,6 @@ router.post('/', adminAuthorization, async(req, res) => {
       return (user.alerts_companies?.length && user.alerts_companies !== "")
         || (user.alerts_classes?.length && user.alerts_classes !=="");
     });
-
-    console.log(`User Alerts:`, notNullAlerts)
 
     // now for each user, filter calls for company && classes
     const alerts = notNullAlerts.map(({ user_email: userEmail, alerts_companies, alerts_classes}) => {
@@ -49,10 +46,15 @@ router.post('/', adminAuthorization, async(req, res) => {
       })}
     });
 
-    sendMail(alerts);
+    // remove any users that have alerts set, but don't have matches in todays new calls
+    const alertsWithMatches = alerts.filter(alert => Object.values(alert).flat().length);
 
-    // send a response to indicate something actually happened
-    res.json("Notification sent");
+    if (alertsWithMatches.length) {
+      sendMail(alertsWithMatches);
+      res.json("Notification sent");
+    } else {
+      res.json("No notifications");
+    }
   } catch (error) {
     console.error(error.message);
     res.status(500).json("failed to retrieve alerts");
