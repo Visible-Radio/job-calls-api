@@ -162,7 +162,8 @@ const parseJobMatch = (jobMatch) => {
   } = jobMatch;
 
   // create a new object to loop over
-  // we'll use this for our plain text and html email conent
+  // We use the property names here as values for the email plaintext
+  // The underscores get removed when the object entries are iterated over
   return {
     Union_Call_Id,
     Call_Date,

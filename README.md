@@ -6,7 +6,7 @@ Built with Node, Express, Knexs and Postgres.  A separate script handles scrapin
 The API responds to POST requests on the root route and at /members_needed_by_date.
 The request body should look like this:
 
-    {
+{
   "start": "2020-12-05",
   "end": "2021-06-07",
   "member_class": ["JW", "AW"],
