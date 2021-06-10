@@ -1,0 +1,27 @@
+### Complete job call information
+POST http://localhost:4000/API
+Content-Type: application/json
+
+{
+  "start": "2020-12-05",
+  "end": "2021-06-07",
+  "member_class": ["JW", "AW"],
+  "company": ["OZZ ELECTRIC", "SMITH & LONG LTD"]
+}
+
+### Totals of requested members by day by class
+POST http://localhost:4000/API/members_needed_byDate/
+Content-Type: application/json
+
+{
+  "start": "2020-12-05",
+  "end": "2021-06-07",
+  "member_class": ["JW", "AW"],
+  "company": ["OZZ ELECTRIC", "SMITH & LONG LTD"]
+}
+
+### List of companies in db
+GET http://localhost:4000/API/companies
+
+### Colors and readable classifications for email and client
+GET http://localhost:4000/API/colors

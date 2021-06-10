@@ -6,12 +6,12 @@ Built with Node, Express, Knexs and Postgres.  A separate script handles scrapin
 The API responds to POST requests on the root route and at /members_needed_by_date.
 The request body should look like this:
 
-    {
-        "start": "2020-12-01",
-        "end": "2020-12-31",
-        "member_class": ["JW", "AW", "TEC2", "ATEC", "CI"],
-        "company": "plan"   
-    }
+{
+  "start": "2020-12-05",
+  "end": "2021-06-07",
+  "member_class": ["JW", "AW"],
+  "company": ["OZZ ELECTRIC", "SMITH & LONG LTD"]
+}
 
 "start" and "end" properties are mandatory and specify the range of dates from which to return records.
 "company" property is optional, and omitting it will return results for all companies.
@@ -35,11 +35,11 @@ Member class codes are as follows:
     ETN: "Electronics Technician",
     JCS: "Journeyman Cable Splicer",
     U: "Utility Man",
-    
-    
+
+
 members_needed_by_date returns an array of objects, each of which contains totals for a day in the specified date range.
 For example, the POST request above would return an array in which this object would appear:
-    
+
     {
         "Date": "2020-12-14",
         "JW": "0",
@@ -49,10 +49,10 @@ For example, the POST request above would return an array in which this object w
         "CI": "0",
         "Total": "2"
     },
-    
+
 The root route returns the complete job calls for the specified dates for the specified member classes.
 For example, the same POST request above would return an array of job calls objects like this:
-    
+
     {
         "id": 22,
         "union_call_id": "59251 S",

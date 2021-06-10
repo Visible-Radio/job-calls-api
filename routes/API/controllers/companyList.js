@@ -4,6 +4,4 @@ function companyList(req, res, db){
 		.then(companyArray => res.json(companyArray));
 };
 
-module.exports = {
-  companyList
-}
+module.exports = companyList;
