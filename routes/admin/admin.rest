@@ -2,4 +2,4 @@
 ### the token payload is the current date for which to get alerts
 POST http://localhost:4000/admin
 Content-Type: application/json
-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyMS0wNi0wOCIsImlhdCI6MTYyMzE2Mjg2MiwiZXhwIjoxNjIzMTY2NDYyfQ.-O454mCpBIqcKIlLaU8GeZdX_H_TLJolfSLEKR5mrnM
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyMS0wNi0xMCIsImlhdCI6MTYyMzM0NjE0NSwiZXhwIjoxNjIzMzQ2MjA1fQ.yQcOWVrOi31wZfnFq0tjAOBagsk7hwFW9HWjL10snYM

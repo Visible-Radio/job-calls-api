@@ -50,12 +50,18 @@ router.post('/', adminAuthorization, async(req, res) => {
     const alertsWithMatches = alerts.filter(alert => Object.values(alert).flat().length);
 
     if (alertsWithMatches.length) {
-      sendMail(alertsWithMatches);
-      res.json("Notification sent");
+      const results = await sendMail(alertsWithMatches);
+      console.log(`results`, results)
+      results.forEach((promise) => console.log(promise.value));
+      const found = alertsWithMatches.length;
+      const rejected = results.filter(result => result.status === "rejected").length;
+      const fulfilled = results.filter(result => result.status === "fulfilled").length
+      res.status(200).json(`Found ${found} users with job matches, Rejected ${rejected}, Fulfilled ${fulfilled}`);
     } else {
-      res.json("No notifications");
+      res.status(200).json("No notifications");
     }
   } catch (error) {
+    console.log("\nOuter error catch")
     console.error(error.message);
     res.status(500).json("failed to retrieve alerts");
   }

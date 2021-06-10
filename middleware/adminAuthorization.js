@@ -35,6 +35,6 @@ require('dotenv').config();
 const payload = {
   date: new Date().toISOString().slice(0, 10)
 }
-jwt.sign(payload, process.env.ADMIN_TOKEN_SECRET, {expiresIn: "1h"});
+jwt.sign(payload, process.env.ADMIN_TOKEN_SECRET, {expiresIn: "1m"});
 
 */

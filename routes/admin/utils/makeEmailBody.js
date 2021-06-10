@@ -1,7 +1,6 @@
 const { colors, readableClassification } = require('../../API/resources/config');
 
 const makeEmailBody = (jobMatches) => {
-
   const header = 'Electrical Trades Job Calls Database\n\n';
   const footer = "\nBrowse historical job call data and configure your alerts at https://job-calls-front-end.herokuapp.com/"
   const htmlFooter =`
@@ -17,16 +16,16 @@ const makeEmailBody = (jobMatches) => {
     // stitch the plain text together, since each job is an element in an array
   }).join('\n') + footer;
 
-  const htmlBody = jobMatches.map(jobMatch => {
+  const htmlBody = jobMatches.map((jobMatch, i, arr) => {
     // for each job match for a user, return an HTML card with the job details
-    return htmlTemplate(jobMatch);
+    return htmlTemplate(jobMatch, i, arr);
     // stitch the HTML together since each HTML card ends up in an array
   }).concat(htmlFooter).join('\n');
 
   return {htmlBody, plainTextBody}
 };
 
-const htmlTemplate = (jobMatch) => {
+const htmlTemplate = (jobMatch, i, arr) => {
   const {
     union_call_id,
     call_date_from_html,
@@ -90,6 +89,7 @@ const htmlTemplate = (jobMatch) => {
     </tr>
 
   </table>
+  <p style="text-align: center">${i+1}/${arr.length}</p>
   `;
 }
 
