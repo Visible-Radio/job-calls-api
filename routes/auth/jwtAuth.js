@@ -42,7 +42,7 @@ router.post('/register', (req, res) => {
     .catch(error => {
       console.error(error.detail);
       trx.rollback();
-      res.status(500).json("Unable to register");
+      res.status(400).json("Unable to register");
     });
   })
   .catch(error => {
@@ -74,7 +74,7 @@ router.post('/login', (req, res) => {
     })
     .catch(error => {
       console.error(error);
-      res.status(500).json("Unable to log in");
+      res.status(400).json("Unable to log in");
     })
 })
 
